@@ -53,6 +53,7 @@ const Calc = () => {
             console.log("get error", err)
         })
     }
+
     //POST equations functions
     const postEquation = (final: string) => {
         axios.post(postEndpoint, {
@@ -60,7 +61,7 @@ const Calc = () => {
             result: final
         })
             .then(response => {
-                console.log("Response from server:", response)
+                console.log("Response from server after POST:", response)
             })
             .catch(err => {
                 console.log("Error in post", err)
@@ -99,7 +100,7 @@ const Calc = () => {
     //evaluates input string 
     const evalExpression = () => {
         //set final variable equal to solved equation to avoid async state
-        const final = round(evaluate(input)).toString()
+        const final = round(evaluate(input), 5).toString()
         try {
             setResult(final)
             console.log("the result is:", result)
@@ -112,110 +113,96 @@ const Calc = () => {
         fetchEquations()
     }
 
+
+
+
     return (
         <div>
             <h2>Calculator 2021</h2>
             <p>{input}</p>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
                 value='1'>
                 1
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
                 value='2'>
                 2
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
                 value='3'>
                 3
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='+'>
                 +
           </button>
             <br />
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='4'>
                 4
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='5'>
                 5
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='6'>
                 6
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='-'>
                 -
           </button>
             <br />
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='7'>
                 7
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='8'>
                 8
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='9'>
                 9
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='/'>
                 ÷
           </button>
             <br />
             <button
-                // className={this.props.classes.numButtons}
                 onClick={clearInput}
                 value=''>
                 C
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='0'>
                 0
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='.'>
                 .
           </button>
             <button
-                // className={this.props.classes.numButtons}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='*'>
                 x
           </button>
             <br />
             <button
-                // className={this.props.classes.backButton}`
                 onClick={backspace} value=''>
                 Back
           </button>
             <button
-                // className={this.props.classes.equalsButton}
                 onClick={evalExpression}
                 value='='>
                 =
           </button>
-            <ul>
+            <ul // loop over equations array and render each entry as a list item in an unordered list
+            >
                 {equations.map(equation => {
                     return (<li key={equation.id}>{equation.input}={equation.result}</li>)
                 })}

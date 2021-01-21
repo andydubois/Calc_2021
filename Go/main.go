@@ -62,13 +62,6 @@ type (
 	}
 )
 
-//addNewEquation add a new equation
-// func addNewEquation(c *gin.Context) {
-// 	equation := equationModel{Input: c.PostForm("input"), Result: c.PostForm("result")}
-// 	db.Save(&equation)
-// 	c.JSON(http.StatusCreated, gin.H{"status": http.StatusCreated, "message": "Equation added successfully", "resourceId": equation.ID})
-// }
-
 func createEquations(equation *equationModel) (err error) {
 	if err = db.Create(equation).Error; err != nil {
 		return err
