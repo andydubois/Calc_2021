@@ -51,7 +51,13 @@ const Calc = () => {
 
 
 
-    useEffect(fetchEquations, [])
+    // useEffect(fetchEquations, [])
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchEquations();
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
 
 
@@ -93,6 +99,7 @@ const Calc = () => {
         }
         setInput(final)
         postEquation(final)
+        fetchEquations()
     }
 
     return (
@@ -210,5 +217,3 @@ const Calc = () => {
 export default Calc;
 
 
-// {equationReducer.map((equation: Equation, index: number) => {
-//     return <li key={index}>{equation.input} {equation.result}</li>;
