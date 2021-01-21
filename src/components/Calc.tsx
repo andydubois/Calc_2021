@@ -84,7 +84,7 @@ const Calc = () => {
     }
 
     const evalExpression = () => {
-        const final = round(evaluate(input))
+        const final = round(evaluate(input)).toString()
         try {
             setResult(final)
             console.log("the result is:", result)
