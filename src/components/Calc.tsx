@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { evaluate, round } from "mathjs";
 import axios from 'axios';
 
+//set state props for component
 interface StateProps {
     id: number;
     input: string;
@@ -14,44 +15,19 @@ const Calc = () => {
     //State hooks
     const [input, setInput] = useState("0");
     const [result, setResult] = useState("");
+
     //array holding equation data to be dispalyed on DOM
     const [equations, setEquations] = useState<StateProps[]>([]);
+
+    //API ENDPOINTS
     //GET URL
     const getEndpoint = "http://localhost:8080/math/equations"
+    //POST URL
     const postEndpoint = "http://localhost:8080/math/add"
 
-    //get equations function
-    const fetchEquations = () => {
-        axios.get(getEndpoint, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(response => {
-            console.log(response.data.data)
-            setEquations(response.data.data)
-            console.log(equations)
-        }).catch(err => {
-            console.log("get error", err)
-        })
-    }
-
-    const postEquation = (final: string) => {
-        axios.post(postEndpoint, {
-            input: input,
-            result: final
-        })
-            .then(response => {
-                console.log(response)
-            })
-            .catch(err => {
-                console.log("Error in post", err)
-            })
-        fetchEquations()
-    }
 
 
-
-    // useEffect(fetchEquations, [])
+    //GET request runs every 5 seconds to update equations list
     useEffect(() => {
         const interval = setInterval(() => {
             fetchEquations();
@@ -60,11 +36,40 @@ const Calc = () => {
     }, []);
 
 
+    //CALCULATOR BUTTON FUNCTIONS
 
+    //GET equations function
+    const fetchEquations = () => {
+        axios.get(getEndpoint, {
+            //set headers for GET
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(response => {
+            console.log("GET request response.data.data", response.data.data)
+            setEquations(response.data.data)
+            console.log("Equations array", equations)
+        }).catch(err => {
+            console.log("get error", err)
+        })
+    }
+    //POST equations functions
+    const postEquation = (final: string) => {
+        axios.post(postEndpoint, {
+            input: input,
+            result: final
+        })
+            .then(response => {
+                console.log("Response from server:", response)
+            })
+            .catch(err => {
+                console.log("Error in post", err)
+            })
+        //GET request to retrieve newly posted equation
+        fetchEquations()
+    }
 
-
-
-
+    //handle value from button push on calculator
     const handleInput = (event: React.MouseEvent) => {
         if (input === "0") {
             setInput((event.target as HTMLButtonElement).value);
@@ -76,11 +81,13 @@ const Calc = () => {
 
     };
 
+    //clears input back to 0
     const clearInput = () => {
         console.log("clear");
         setInput("0")
     };
 
+    //takes last entered character off of input string
     const backspace = () => {
         try {
             setInput(input.slice(0, -1))
@@ -89,7 +96,9 @@ const Calc = () => {
         }
     }
 
+    //evaluates input string 
     const evalExpression = () => {
+        //set final variable equal to solved equation to avoid async state
         const final = round(evaluate(input)).toString()
         try {
             setResult(final)
@@ -99,6 +108,7 @@ const Calc = () => {
         }
         setInput(final)
         postEquation(final)
+        //GET request to retrieve newly posted equation
         fetchEquations()
     }
 
