@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { evaluate, round } from "mathjs";
+import axios from 'axios';
+
+interface StateProps {
+    id: number;
+    input: string;
+    result: string;
+    data: []
+}
 
 
 const Calc = () => {
+    //State hooks
     const [input, setInput] = useState("0");
     const [result, setResult] = useState("");
-    const [equations, setEquations] = useState([]);
+    const [equations, setEquations] = useState<StateProps[]>([]);
     const getEndpoint = "http://localhost:8080/math/equations"
 
 
@@ -13,15 +22,20 @@ const Calc = () => {
 
 
     React.useEffect(() => {
-        console.log("fetch")
-        fetch(getEndpoint)
-            .then(response => response.json())
-            .then(response => {
-                setEquations(equations.concat(response.data))
-                console.log(response)
-            })
-            .catch(console.error)
-    })
+        axios.get(getEndpoint, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(response => {
+            console.log(response.data.data)
+            setEquations(response.data.data)
+            console.log(equations)
+        }).catch(err => {
+            console.log("get error", err)
+        })
+    }, [])
+
+
 
 
 
@@ -164,7 +178,9 @@ const Calc = () => {
                 =
           </button>
             <ul>
-                {equations}
+                {equations.map(equation => {
+                    return (<li key={equation.id}>{equation.input}={equation.result}</li>)
+                })}
             </ul>
         </div>
     );
