@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { evaluate, round } from "mathjs";
 import axios from 'axios';
 
@@ -14,14 +14,14 @@ const Calc = () => {
     //State hooks
     const [input, setInput] = useState("0");
     const [result, setResult] = useState("");
+    //array holding equation data to be dispalyed on DOM
     const [equations, setEquations] = useState<StateProps[]>([]);
+    //GET URL
     const getEndpoint = "http://localhost:8080/math/equations"
+    const postEndpoint = "http://localhost:8080/math/add"
 
-
-
-
-
-    React.useEffect(() => {
+    //get equations function
+    const fetchEquations = () => {
         axios.get(getEndpoint, {
             headers: {
                 "Content-Type": "application/json"
@@ -33,7 +33,27 @@ const Calc = () => {
         }).catch(err => {
             console.log("get error", err)
         })
-    }, [])
+    }
+
+    const postEquation = (final: string) => {
+        axios.post(postEndpoint, {
+            input: input,
+            result: final
+        })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(err => {
+                console.log("Error in post", err)
+            })
+        fetchEquations()
+    }
+
+
+
+    useEffect(fetchEquations, [])
+
+
 
 
 
@@ -72,6 +92,7 @@ const Calc = () => {
             setInput("ERROR")
         }
         setInput(final)
+        postEquation(final)
     }
 
     return (
