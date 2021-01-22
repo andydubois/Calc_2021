@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { evaluate, round } from "mathjs";
 import axios from 'axios';
+import * as CSS from "./CalcStyles"
+
 
 //set state props for component
 interface StateProps {
@@ -12,6 +14,7 @@ interface StateProps {
 
 
 const Calc = () => {
+
     //State hooks
     const [input, setInput] = useState("0");
     const [result, setResult] = useState("");
@@ -25,15 +28,19 @@ const Calc = () => {
     //POST URL
     const postEndpoint = "http://localhost:8080/math/add"
 
+    //Acting as componentDidMount, sends GET request on page load so DOM is populated
+    useEffect(() => {
+        fetchEquations()
+    }, [])
 
 
     //GET request runs every 5 seconds to update equations list
     useEffect(() => {
         const interval = setInterval(() => {
             fetchEquations();
-        }, 5000);
+        }, 3000);
         return () => clearInterval(interval);
-    }, []);
+    }, [equations]);
 
 
     //CALCULATOR BUTTON FUNCTIONS
@@ -46,9 +53,10 @@ const Calc = () => {
                 "Content-Type": "application/json"
             }
         }).then(response => {
-            console.log("GET request response.data.data", response.data.data)
+            console.log("GET successful, setting equations array")
+            // console.log("GET request response.data.data", response.data.data)
             setEquations(response.data.data)
-            console.log("Equations array", equations)
+            // console.log("Equations array", equations)
         }).catch(err => {
             console.log("get error", err)
         })
@@ -117,96 +125,99 @@ const Calc = () => {
 
 
     return (
-        <div>
+        <div style={CSS.calcDiv}>
             <h2>Calculator 2021</h2>
-            <p>{input}</p>
+            <p style={CSS.calcDisplay}>{input}</p>
             <button
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
-                value='1'>
+                value='1'
+                style={CSS.numButtons}>
                 1
           </button>
             <button
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
-                value='2'>
+                value='2' style={CSS.numButtons}>
                 2
           </button>
             <button
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
-                value='3'>
+                value='3' style={CSS.numButtons}>
                 3
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='+'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='+' style={CSS.numButtons}>
                 +
           </button>
             <br />
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='4'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='4' style={CSS.numButtons}>
                 4
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='5'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='5' style={CSS.numButtons}>
                 5
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='6'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='6' style={CSS.numButtons}>
                 6
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='-'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='-' style={CSS.numButtons}>
                 -
           </button>
             <br />
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='7'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='7' style={CSS.numButtons}>
                 7
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='8'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='8' style={CSS.numButtons}>
                 8
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='9'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='9' style={CSS.numButtons}>
                 9
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='/'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='/' style={CSS.numButtons}>
                 ÷
           </button>
             <br />
             <button
                 onClick={clearInput}
-                value=''>
+                value='' style={CSS.numButtons}>
                 C
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='0'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='0' style={CSS.numButtons}>
                 0
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='.'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='.' style={CSS.numButtons}>
                 .
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='*'>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='*' style={CSS.numButtons}>
                 x
           </button>
             <br />
             <button
-                onClick={backspace} value=''>
+                onClick={backspace} value='' style={CSS.backButton}>
                 Back
           </button>
             <button
                 onClick={evalExpression}
-                value='='>
+                value='=' style={CSS.equalsButton}>
                 =
           </button>
-            <ul // loop over equations array and render each entry as a list item in an unordered list
-            >
-                {equations.map(equation => {
-                    return (<li key={equation.id}>{equation.input}={equation.result}</li>)
-                })}
-            </ul>
+            <div>
+                <ul style={CSS.equationList}>
+                    {equations.map(equation => {
+                        return (<li key={equation.id} style={CSS.listItem}>{equation.input}   =  <span style={CSS.answers}>{equation.result}</span></li>)
+                    })}
+                </ul>
+            </div>
+            <hr />
         </div>
     );
 }
