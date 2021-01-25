@@ -38,7 +38,7 @@ const Calc = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             fetchEquations();
-        }, 3000);
+        }, 2000);
         return () => clearInterval(interval);
     }, [equations]);
 
