@@ -5,11 +5,11 @@ import * as CSS from "./CalcStyles"
 
 
 //set state props for component
-interface StateProps {
+interface EquationProps {
     id: number;
     input: string;
     result: string;
-    data: []
+    // data: []
 }
 
 
@@ -20,7 +20,7 @@ const Calc = () => {
     const [result, setResult] = useState("");
 
     //array holding equation data to be dispalyed on DOM
-    const [equations, setEquations] = useState<StateProps[]>([]);
+    const [equations, setEquations] = useState<EquationProps[]>([]);
 
     //API ENDPOINTS
     //GET URL
@@ -70,12 +70,12 @@ const Calc = () => {
         })
             .then(response => {
                 console.log("Response from server after POST:", response)
+                //GET request to retrieve newly posted equation
+                fetchEquations()
             })
             .catch(err => {
                 console.log("Error in post", err)
             })
-        //GET request to retrieve newly posted equation
-        fetchEquations()
     }
 
     //handle value from button push on calculator
@@ -145,41 +145,58 @@ const Calc = () => {
                 3
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='+' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='+'
+                style={CSS.numButtons}>
                 +
           </button>
             <br />
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='4' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='4'
+                style={CSS.numButtons}>
                 4
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='5' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='5'
+                style={CSS.numButtons}>
                 5
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='6' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='6'
+                style={CSS.numButtons}>
                 6
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='-' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='-'
+                style={CSS.numButtons}>
                 -
           </button>
             <br />
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='7' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='7'
+                style={CSS.numButtons}>
                 7
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='8' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='8'
+                style={CSS.numButtons}>
                 8
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='9' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='9'
+                style={CSS.numButtons}>
                 9
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='/' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='/' style={CSS.numButtons}>
                 ÷
           </button>
             <br />
@@ -189,25 +206,34 @@ const Calc = () => {
                 C
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='0' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='0'
+                style={CSS.numButtons}>
                 0
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='.' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='.'
+                style={CSS.numButtons}>
                 .
           </button>
             <button
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)} value='*' style={CSS.numButtons}>
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleInput(event)}
+                value='*'
+                style={CSS.numButtons}>
                 x
           </button>
             <br />
             <button
-                onClick={backspace} value='' style={CSS.backButton}>
+                onClick={backspace}
+                value=''
+                style={CSS.backButton}>
                 Back
           </button>
             <button
                 onClick={evalExpression}
-                value='=' style={CSS.equalsButton}>
+                value='='
+                style={CSS.equalsButton}>
                 =
           </button>
             <div>
@@ -218,7 +244,7 @@ const Calc = () => {
                 </ul>
             </div>
             <hr />
-        </div>
+        </div >
     );
 }
 
