@@ -3,24 +3,30 @@ import { evaluate, round } from "mathjs";
 import axios from 'axios';
 import * as CSS from "./CalcStyles"
 
+import EquationList from "./EquationList"
+
 
 //set state props for component
 interface EquationProps {
+    equations?: ArrayProps[]
+}
+
+interface ArrayProps {
     id: number;
-    input: string;
-    result: string;
-    // data: []
+    input?: string;
+    result?: string;
 }
 
 
-const Calc = () => {
+
+const Calc: React.FC<EquationProps> = () => {
 
     //State hooks
     const [input, setInput] = useState("0");
     const [result, setResult] = useState("");
 
     //array holding equation data to be dispalyed on DOM
-    const [equations, setEquations] = useState<EquationProps[]>([]);
+    const [equations, setEquations] = useState<ArrayProps[]>([]);
 
     //API ENDPOINTS
     //GET URL
@@ -237,11 +243,7 @@ const Calc = () => {
                 =
           </button>
             <div>
-                <ul style={CSS.equationList}>
-                    {equations.map(equation => {
-                        return (<li key={equation.id} style={CSS.listItem}>{equation.input}   =  <span style={CSS.answers}>{equation.result}</span></li>)
-                    })}
-                </ul>
+                <EquationList equations={equations} />
             </div>
             <hr />
         </div >
